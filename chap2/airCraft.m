@@ -1,22 +1,39 @@
 function airCraft(uu)
  
-  V = [ 0 3.5 0; ... % P1
-  1 2 0.2; ... %P2
-  -1 2 0.2; ... %P3
-  -1 2 -0.2; ... %P4
-  1 2 -0.2; ... %P5
-  0 -5 0; ... %P6
-  3 1 0; ... %P7
-  3 -1 0; ... %P8
-  -3 -1 0; ... %P9
-  -3 1 0; ... %P10
-  1.5 -4 0; ... %P11
-  1.5 -5 0; ... %P12
-  -1.5 -5 0; ... %P13
-  -1.5 -4 0; ... %P14
-  0 -3 0; ... %P15
-  0 -5 1; ... %P16
-  ];
+  % V = [ 0 3.5 0; ... % P1
+  % 1 2 0.2; ... %P2
+  % -1 2 0.2; ... %P3
+  % -1 2 -0.2; ... %P4
+  % 1 2 -0.2; ... %P5
+  % 0 -5 0; ... %P6
+  % 3 1 0; ... %P7
+  % 3 -1 0; ... %P8
+  % -3 -1 0; ... %P9
+  % -3 1 0; ... %P10
+  % 1.5 -4 0; ... %P11
+  % 1.5 -5 0; ... %P12
+  % -1.5 -5 0; ... %P13
+  % -1.5 -4 0; ... %P14
+  % 0 -3 0; ... %P15
+  % 0 -5 1; ... %P16
+  % ];
+
+  V=[3.5000   0         0     ; ...
+  2.0000   -1.0000    0.2000; ...
+  2.0000    1.0000    0.2000; ...
+  2.0000    1.0000   -0.2000; ...
+  2.0000   -1.0000   -0.2000; ...
+ -5.0000         0         0; ...
+  1.0000   -3.0000         0; ...
+ -1.0000   -3.0000         0; ...
+ -1.0000    3.0000         0; ...
+  1.0000    3.0000         0; ...
+ -4.0000   -1.5000         0; ...
+ -5.0000   -1.5000         0; ...
+ -5.0000    1.5000         0; ...
+ -4.0000    1.5000         0; ...
+ -3.0000         0         0; ...
+ -5.0000         0    -3.0000];
 
   F1 = [ 1 2 3; ...
    1 4 3; ...
@@ -36,23 +53,7 @@ function airCraft(uu)
 end
 
 
-function drawSpacecraft(uu, V, F1, F2)
-
-    
-    % define colors for each face
-    myred = [1, 0, 0];
-    mygreen = [0, 1, 0];
-    myblue = [0, 0, 1];
-    myyellow = [1, 1, 0];
-    mycyan = [0, 1, 1];
-    patchcolors = [...
-    myred;... % front
-    mygreen;... % back
-    myblue;... % right
-    myyellow;... % left
-    mycyan;... % top
-    mycyan;... % bottom
-    ];
+function drawSpacecraft(uu, V, F1, F2)    
 
     % process inputs to function
     pn       = uu(1);       % inertial North position     
@@ -76,11 +77,11 @@ function drawSpacecraft(uu, V, F1, F2)
     % first time function is called, initialize plot and persistent vars
     if t==0
         figure(1), clf
-        spacecraft_handle_1 = drawSpacecraftBody(V,F1,patchcolors,...
+        spacecraft_handle_1 = drawSpacecraftBody(V,F1,'b',...
                                                pn,pe,pd,phi,theta,psi,...
                                                [],'normal');
 
-        spacecraft_handle_2 = drawSpacecraftBody(V,F2,patchcolors,...
+        spacecraft_handle_2 = drawSpacecraftBody(V,F2,'g',...
                                                pn,pe,pd,phi,theta,psi,...
                                                [],'normal');
         title('Spacecraft')
@@ -88,17 +89,17 @@ function drawSpacecraft(uu, V, F1, F2)
         ylabel('North')
         zlabel('-Down')
         view(32,47)  % set the vieew angle for figure
-        axis([-10,10,-10,10,-10,10]);
+        axis([-10,10,-15,15,-20,20]);
         grid on
         hold on
         
     % at every other time step, redraw base and rod
     else 
-        drawSpacecraftBody(V,F1,patchcolors,...
+        drawSpacecraftBody(V,F1,'b',...
                            pn,pe,pd,phi,theta,psi,...
                            spacecraft_handle_1);
 
-        drawSpacecraftBody(V,F2,patchcolors,...
+        drawSpacecraftBody(V,F2,'g',...
                            pn,pe,pd,phi,theta,psi,...
                            spacecraft_handle_2);
     end
@@ -124,9 +125,9 @@ function handle = drawSpacecraftBody(V,F,patchcolors,...
   V = V*R;
   
   if isempty(handle),
-  handle = patch('Vertices', V, 'Faces', F);
+  handle = patch('Vertices', V, 'Faces', F, 'FaceColor', patchcolors);
   else
-    set(handle,'Vertices',V,'Faces',F);
+    set(handle,'Vertices',V,'Faces',F, 'FaceColor',patchcolors);
     drawnow
   end
 end
